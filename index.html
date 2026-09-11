@@ -150,9 +150,18 @@
     align-self:flex-start; background: var(--green); color:#fff; border:none; font-weight:700; font-size:15px;
     padding: 14px 28px; border-radius:999px; cursor:pointer; white-space:nowrap;
     transition: background .2s ease, transform .2s ease;
+    display:inline-flex; align-items:center; gap:9px;
   }
   .wl-cta:hover{ background: var(--green-dark); transform: translateY(-1px); }
-  .wl-cta[disabled]{ opacity:.6; cursor:wait; }
+  .wl-cta[disabled]{ opacity:.75; cursor:wait; }
+  .wl-cta .spinner{
+    display:none; width:14px; height:14px; border-radius:50%;
+    border: 2px solid rgba(255,255,255,.4); border-top-color:#fff;
+    animation: spin .7s linear infinite;
+  }
+  .wl-cta[disabled] .spinner{ display:inline-block; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .wl-cta .spinner{ animation:none; } }
   .hp-field{ position:absolute; left:-9999px; top:-9999px; }
   .wl-error{ display:none; color:#B3261E; font-size:13.5px; margin-top:-2px; }
   .wl-error.show{ display:block; }
@@ -506,7 +515,7 @@
         <input name="name" type="text" placeholder="Full name" required>
         <input name="phone" type="tel" inputmode="numeric" pattern="[0-9+ ]{7,15}" placeholder="Mobile number" required>
         <input name="email" type="email" placeholder="Email ID" required>
-        <button type="submit" class="wl-cta">Join as a resident</button>
+        <button type="submit" class="wl-cta"><span class="spinner"></span><span class="label">Join as a resident</span></button>
         <div class="wl-error" id="residentError">Something went wrong — please try again, or email us at info@yaybour.com.</div>
       </form>
       <div class="join-success" id="residentSuccess"><span class="check">✓</span> You're on the list — we'll reach out when Mumbai goes live.</div>
@@ -537,7 +546,7 @@
         <input name="name" type="text" placeholder="Full name" required>
         <input name="phone" type="tel" inputmode="numeric" pattern="[0-9+ ]{7,15}" placeholder="Mobile number" required>
         <input name="email" type="email" placeholder="Email ID" required>
-        <button type="submit" class="wl-cta">Join as a business</button>
+        <button type="submit" class="wl-cta"><span class="spinner"></span><span class="label">Join as a business</span></button>
         <div class="wl-error" id="businessError">Something went wrong — please try again, or email us at info@yaybour.com.</div>
       </form>
       <div class="join-success" id="businessSuccess"><span class="check">✓</span> You're on the list — we'll reach out when Mumbai goes live.</div>
@@ -686,7 +695,10 @@
     }
 
     const btn = form.querySelector('button[type="submit"]');
+    const label = btn.querySelector('.label');
+    const originalLabel = label ? label.textContent : null;
     btn.disabled = true;
+    if (label) label.textContent = 'Joining…';
     try {
       await fetch(SHEET_ENDPOINT, {
         method: 'POST',
@@ -699,6 +711,7 @@
       document.getElementById(successId).classList.add('show');
     } catch (err) {
       btn.disabled = false;
+      if (label && originalLabel) label.textContent = originalLabel;
       errorBox.classList.add('show');
     }
   }
