@@ -676,7 +676,7 @@
   // each entry as a new row in the connected Google Sheet.
   const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyYo7ioFoWA-MvSF6SsEcA0zr54kDLaKOncIn626PR7ZeG8HtO1D32bV025OhOADKCe/exec';
 
-  async function handleWaitlistSubmit(e, successId, errorId){
+  function handleWaitlistSubmit(e, successId, errorId){
     e.preventDefault();
     const form = e.target;
     const errorBox = document.getElementById(errorId);
@@ -694,26 +694,20 @@
       return;
     }
 
-    const btn = form.querySelector('button[type="submit"]');
-    const label = btn.querySelector('.label');
-    const originalLabel = label ? label.textContent : null;
-    btn.disabled = true;
-    if (label) label.textContent = 'Joining…';
-    try {
-      await fetch(SHEET_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: new FormData(form)
-      });
-      // Apps Script endpoints don't return readable CORS status in no-cors mode,
-      // so a fetch that didn't throw is treated as a successful submission.
-      form.style.display = 'none';
-      document.getElementById(successId).classList.add('show');
-    } catch (err) {
-      btn.disabled = false;
-      if (label && originalLabel) label.textContent = originalLabel;
-      errorBox.classList.add('show');
-    }
+    // Show success immediately — Apps Script can take a few seconds to respond,
+    // and that latency shouldn't be visible to the person joining the waitlist.
+    // The actual save happens in the background; a rare, silent failure here
+    // is an accepted trade-off for zero perceived lag.
+    form.style.display = 'none';
+    document.getElementById(successId).classList.add('show');
+
+    fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new FormData(form)
+    }).catch(err => {
+      console.error('Waitlist submission failed to send in the background:', err);
+    });
   }
 
   document.getElementById('residentForm').addEventListener('submit', (e) => handleWaitlistSubmit(e, 'residentSuccess', 'residentError'));
