@@ -144,6 +144,7 @@
 <script>
   // Paste your Google Sheet's "Publish to web" CSV link here (see setup guide).
   const JOBS_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRLdKE6f__aAXJvduofbF1nXqBllYAJHfXflxfIfcpYojMybgXIVeYhnrUK_g0o821eec71P_-XYyd8/pub?gid=0&single=true&output=csv';
+  const APPLICATION_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScKEZE3dmN-fd9hy_obOPgaZuPWRvbhGt5udCnJBpdBFu4UEg/viewform?usp=pp_url&entry.226710025=';
 
   const nav = document.getElementById('siteNav');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 12));
@@ -210,15 +211,14 @@
         const title = escapeHtml(r[idx.title]);
         const location = escapeHtml(r[idx.location]);
         const type = escapeHtml(r[idx.type]);
-        const email = (r[idx.email] || '').trim();
         const descLines = (r[idx.description] || '').split('\n').map(l => l.replace(/^\s*[\*\-\u2022]\s*/, '').trim()).filter(l => l.length);
         const descHtml = descLines.map(l => '<li>' + escapeHtml(l) + '</li>').join('');
-        const subject = encodeURIComponent('Application for ' + (r[idx.title] || '').trim());
+        const applyUrl = APPLICATION_FORM_URL + encodeURIComponent((r[idx.title] || '').trim());
         return '<div class="job-card">' +
           '<div class="job-top">' +
             '<div><div class="job-title">' + title + '</div>' +
             '<div class="job-meta"><span>' + location + '</span><span>' + type + '</span></div></div>' +
-            '<a class="job-apply" href="mailto:' + email + '?subject=' + subject + '">Apply</a>' +
+            '<a class="job-apply" href="' + applyUrl + '" target="_blank" rel="noopener">Apply</a>' +
           '</div>' +
           '<ul class="job-desc">' + descHtml + '</ul>' +
         '</div>';
