@@ -165,7 +165,28 @@
   .hp-field{ position:absolute; left:-9999px; top:-9999px; }
   .wl-error{ display:none; color:#B3261E; font-size:13.5px; margin-top:-2px; }
   .wl-error.show{ display:block; }
-
+  /* ---------- countdown ---------- */
+  .countdown{ margin-bottom: 4px; }
+  .cd-label{ font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color: var(--green-dark); margin-bottom:12px; }
+  .cd-row{ display:flex; gap:10px; }
+  .cd-tile{
+    min-width:76px; padding:14px 10px 12px; text-align:center; background: var(--paper-raised);
+    border:1px solid var(--line); border-radius: var(--radius-md);
+    box-shadow: 0 14px 30px -24px rgba(14,92,56,.4);
+  }
+  .cd-num{ display:block; font-size:34px; font-weight:800; letter-spacing:-.02em; line-height:1; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .cd-unit{ display:block; margin-top:7px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color: var(--ink-soft); }
+  .cd-tile.secs .cd-num{ color: var(--green); }
+  .cd-date{ margin-top:12px; font-size:13.5px; color: var(--ink-soft); }
+  .cd-live{ display:none; align-items:center; gap:10px; background: var(--green-pale); border:1px solid var(--green); color: var(--green-dark); font-weight:800; font-size:18px; padding:16px 22px; border-radius: var(--radius-md); }
+  .cd-live::before{ content:''; width:10px; height:10px; border-radius:50%; background: var(--green); box-shadow:0 0 0 5px rgba(25,151,93,.2); }
+  .countdown.is-live .cd-row, .countdown.is-live .cd-date, .countdown.is-live .cd-label{ display:none; }
+  .countdown.is-live .cd-live{ display:inline-flex; }
+  @media (max-width: 520px){
+    .cd-row{ gap:8px; }
+    .cd-tile{ min-width:0; flex:1; padding:12px 4px 10px; }
+    .cd-num{ font-size:28px; }
+  }
   .radius-visual{ position:relative; width:100%; aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center; will-change: transform; }
   .ring{ position:absolute; top:32.5%; left:32.5%; width:35%; height:35%; border-radius:50%; border: 1.5px solid var(--green); opacity:0; animation: ringPulse 4.5s ease-out infinite; transform-origin: center; }
   .ring.r1{ animation-delay: 0s; } .ring.r2{ animation-delay: 1.1s; } .ring.r3{ animation-delay: 2.2s; } .ring.r4{ animation-delay: 3.3s; }
@@ -393,7 +414,17 @@
 <section class="hero">
   <div class="wrap hero-grid">
     <div class="reveal is-visible">
-      <span class="eyebrow">Launching soon &middot; Mumbai First</span>
+      <div class="countdown" id="countdown" role="timer" aria-label="Time until Yaybour goes live in Mumbai">
+        <div class="cd-label">Going live in Mumbai</div>
+        <div class="cd-row">
+          <div class="cd-tile"><span class="cd-num" id="cdDays">00</span><span class="cd-unit">Days</span></div>
+          <div class="cd-tile"><span class="cd-num" id="cdHours">00</span><span class="cd-unit">Hours</span></div>
+          <div class="cd-tile"><span class="cd-num" id="cdMins">00</span><span class="cd-unit">Minutes</span></div>
+          <div class="cd-tile secs"><span class="cd-num" id="cdSecs">00</span><span class="cd-unit">Seconds</span></div>
+        </div>
+        <div class="cd-date">12 November 2026, 12:00 PM IST</div>
+        <div class="cd-live">Yaybour is live now</div>
+      </div>
       <h1>Your neighbourhood, brought <em>closer</em>.</h1>
       <p class="lede">Yaybour connects you with the real people and verified businesses in your neighbourhood — for the moment you actually need someone nearby, not another feed to scroll.</p>
       <div class="hero-chips">
@@ -644,6 +675,25 @@
 </footer>
 
 <script>
+    // ---- Launch countdown: 12 Nov 2026, 12:00 PM IST (fixed moment for everyone) ----
+  (function(){
+    const LAUNCH = new Date('2026-11-12T12:00:00+05:30').getTime();
+    const box = document.getElementById('countdown');
+    const d = document.getElementById('cdDays'), h = document.getElementById('cdHours'),
+          m = document.getElementById('cdMins'), sc = document.getElementById('cdSecs');
+    const pad = n => String(n).padStart(2, '0');
+    function tick(){
+      const diff = LAUNCH - Date.now();
+      if (diff <= 0){ box.classList.add('is-live'); return false; }
+      const t = Math.floor(diff / 1000);
+      d.textContent = pad(Math.floor(t / 86400));
+      h.textContent = pad(Math.floor(t % 86400 / 3600));
+      m.textContent = pad(Math.floor(t % 3600 / 60));
+      sc.textContent = pad(t % 60);
+      return true;
+    }
+    if (tick()){ const id = setInterval(() => { if (!tick()) clearInterval(id); }, 1000); }
+  })();
   // Loader
   window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
