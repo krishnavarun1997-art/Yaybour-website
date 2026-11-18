@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Yaybour — Your Neighbourhood, Brought Closer</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../favicon.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PY98R2034C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PY98R2034C');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#19975D; --green-dark:#0E5C38; --green-pale:#E4F1EA;
+    --ink:#10201A; --ink-soft:#46564E; --paper:#F7F5EF; --paper-raised:#FFFFFF;
+    --amber:#F2A93B; --line:#DCD8CC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Plus Jakarta Sans',sans-serif; background:var(--paper); color:var(--ink);
+    -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .card{
+    width:100%; max-width:440px; background:var(--paper-raised); border:1px solid var(--line);
+    border-radius:28px; padding:36px 28px 30px; text-align:center;
+    box-shadow:0 10px 40px rgba(16,32,26,.06);
+  }
+  .logo{ width:150px; height:auto; margin:0 auto 22px; display:block; }
+  h1{ font-size:24px; font-weight:800; line-height:1.25; letter-spacing:-.01em; margin-bottom:10px; }
+  h1 em{ font-style:normal; color:var(--green); }
+  p.sub{ font-size:15px; line-height:1.55; color:var(--ink-soft); margin-bottom:22px; }
+  .view{ display:none; }
+  .view.show{ display:block; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    padding:15px 20px; border-radius:14px; border:none; cursor:pointer; text-decoration:none;
+    font-family:inherit; font-size:15.5px; font-weight:700; color:#fff; background:var(--green);
+    transition:background .2s ease;
+  }
+  .btn:hover{ background:var(--green-dark); }
+  .btn svg{ width:20px; height:20px; fill:currentColor; }
+
+  .pill{
+    display:inline-block; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--green-dark); background:var(--green-pale); border-radius:999px; padding:6px 12px; margin-bottom:16px;
+  }
+  form{ display:flex; flex-direction:column; gap:10px; text-align:left; }
+  input[type=text], input[type=tel]{
+    width:100%; padding:14px 16px; border:1.5px solid var(--line); border-radius:12px;
+    font-family:inherit; font-size:15px; background:#fff; outline:none;
+  }
+  input:focus{ border-color:var(--green); }
+  .hp{ position:absolute; left:-9999px; opacity:0; height:0; width:0; }
+  .success{
+    display:none; background:var(--green-pale); color:var(--green-dark); border-radius:14px;
+    padding:16px; font-size:15px; font-weight:600; line-height:1.5;
+  }
+  .success.show{ display:block; }
+  .note{ font-size:13px; color:var(--ink-soft); margin-top:16px; line-height:1.5; }
+  .qr{ width:190px; height:190px; margin:6px auto 14px; display:block; border-radius:12px; border:1px solid var(--line); padding:8px; background:#fff; }
+  .divider{ height:1px; background:var(--line); margin:22px 0; }
+  .small-link{ font-size:13.5px; color:var(--ink-soft); }
+  .small-link a{ color:var(--green-dark); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="logo" src="logo.png" alt="Yaybour">
+
+  <!-- ANDROID: redirecting to Google Play -->
+  <div class="view" id="vAndroid">
+    <h1>Taking you to <em>Google Play</em>…</h1>
+    <p class="sub">If nothing happens in a moment, tap the button below.</p>
+    <a class="btn" id="playBtnAndroid" href="#">Get Yaybour on Google Play</a>
+  </div>
+
+  <!-- iPHONE / iPAD: coming soon -->
+  <div class="view" id="vIos">
+    <span class="pill">iPhone — coming soon</span>
+    <h1>Yaybour is almost on the <em>App Store</em></h1>
+    <p class="sub">We're live on Android and waiting on Apple's final approval. Leave your number and we'll message you the moment it's ready to download.</p>
+    <form id="iosForm">
+      <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <input name="name" type="text" placeholder="Your name" autocomplete="name" required>
+      <input name="phone" type="tel" inputmode="numeric" pattern="[0-9+ ]{7,15}" placeholder="Mobile number (WhatsApp)" autocomplete="tel" required>
+      <button type="submit" class="btn">Notify me on iPhone</button>
+    </form>
+    <div class="success" id="iosSuccess">✓ You're on the list — we'll message you on WhatsApp the day Yaybour is live on the App Store.</div>
+    <p class="note">Your number is used only to tell you when the iPhone app is ready.</p>
+  </div>
+
+  <!-- DESKTOP / OTHER -->
+  <div class="view" id="vDesktop">
+    <h1>Get Yaybour on your <em>phone</em></h1>
+    <p class="sub">Scan this code with your phone's camera to download the app.</p>
+    <img class="qr" src="qr-desktop.svg" alt="QR code to download Yaybour">
+    <a class="btn" id="playBtnDesktop" href="#">Android — Get it on Google Play</a>
+    <div class="divider"></div>
+    <p class="small-link">On iPhone? We're coming to the App Store soon.<br><a href="#" id="iosLinkDesktop">Get notified when it's live</a></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ============ SETTINGS — the only things you ever need to change ============
+  // Google Play listing (package id looks like com.company.app)
+  var PLAY_PACKAGE = 'com.yaybourapp';
+  // When Apple approves the app, paste the App Store link here. The page will then
+  // send iPhone users there instead of showing the "coming soon" form.
+  var APP_STORE_URL = '';
+  // Same Apps Script endpoint your waitlist forms already use
+  var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyYo7ioFoWA-MvSF6SsEcA0zr54kDLaKOncIn626PR7ZeG8HtO1D32bV025OhOADKCe/exec';
+  // ===========================================================================
+
+  var params = new URLSearchParams(location.search);
+  var src = (params.get('src') || 'direct').replace(/[^a-z0-9_-]/gi,'').slice(0,30) || 'direct';
+
+  function playUrl(){
+    return 'https://play.google.com/store/apps/details?id=' + encodeURIComponent(PLAY_PACKAGE) +
+           '&referrer=' + encodeURIComponent('utm_source=' + src + '&utm_medium=get_page');
+  }
+
+  function detect(){
+    var ua = navigator.userAgent || '';
+    if (/android/i.test(ua)) return 'android';
+    // iPadOS 13+ reports itself as a Mac, so also check for touch support
+    var iPadOS = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
+    if (/iPhone|iPad|iPod/i.test(ua) || iPadOS) return 'ios';
+    return 'desktop';
+  }
+
+  function show(id){ document.getElementById(id).classList.add('show'); }
+  function track(platform, action){
+    try { gtag('event', 'get_page', { platform: platform, src: src, action: action }); } catch(e){}
+  }
+
+  var platform = detect();
+  var configured = PLAY_PACKAGE.indexOf('PASTE_') !== 0;
+
+  document.getElementById('playBtnAndroid').href = playUrl();
+  document.getElementById('playBtnDesktop').href = playUrl();
+
+  if (platform === 'android'){
+    show('vAndroid');
+    track('android','redirect');
+    if (configured) setTimeout(function(){ location.replace(playUrl()); }, 350);
+  } else if (platform === 'ios'){
+    if (APP_STORE_URL){
+      track('ios','redirect');
+      location.replace(APP_STORE_URL + (APP_STORE_URL.indexOf('?') > -1 ? '&' : '?') + 'ct=' + encodeURIComponent(src));
+    } else {
+      show('vIos');
+      track('ios','notify_view');
+    }
+  } else {
+    show('vDesktop');
+    track('desktop','view');
+    document.getElementById('iosLinkDesktop').addEventListener('click', function(e){
+      e.preventDefault();
+      document.getElementById('vDesktop').classList.remove('show');
+      show('vIos');
+      track('desktop','ios_notify_view');
+    });
+  }
+
+  // ---- iPhone "notify me" form: optimistic submit, same pattern as the waitlist forms ----
+  document.getElementById('iosForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var form = e.target;
+    if (form.querySelector('[name="bot-field"]').value){
+      form.style.display = 'none'; show('iosSuccess'); return;
+    }
+    var fd = new FormData(form);
+    fd.delete('bot-field');
+    fd.append('email', '');
+    // "source" tells you in the Sheet that this is an iPhone sign-up and which channel it came from
+    fd.append('source', 'ios-notify|' + src);
+    form.style.display = 'none';
+    show('iosSuccess');
+    track('ios','notify_submit');
+    fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', body: fd }).catch(function(err){
+      console.error('iOS notify submission failed in background:', err);
+    });
+  });
+})();
+</script>
+</body>
+</html>
